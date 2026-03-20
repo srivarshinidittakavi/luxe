@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXE STORE — Order Confirmed!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2; --dark: #1A1612; --warm: #C8A97E;
+    --accent: #8B4513; --mid: #6B5B45; --light: #EDE8DF;
+    --white: #FFFFFF; --red: #C0392B; --green: #27AE60;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; }
+
+  nav { background: var(--dark); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--warm); letter-spacing: 3px; text-decoration: none; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { color: var(--cream); text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; }
+  .nav-links a:hover { color: var(--warm); }
+  .cart-btn { background: var(--warm); color: var(--dark); border: none; padding: 10px 20px; border-radius: 30px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+
+  .steps { display: flex; align-items: center; justify-content: center; padding: 30px 40px 10px; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--light); background: white; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; color: #ccc; }
+  .step.active .step-num { background: var(--warm); border-color: var(--warm); color: var(--dark); }
+  .step.done .step-num { background: var(--green); border-color: var(--green); color: white; }
+  .step-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #aaa; }
+  .step.active .step-label { color: var(--warm); font-weight: 600; }
+  .step-line { flex: 1; height: 2px; background: var(--light); max-width: 80px; margin: 0 8px; margin-bottom: 22px; }
+  .step-line.done { background: var(--green); }
+
+  .success-page { display: flex; align-items: center; justify-content: center; padding: 60px 20px 80px; }
+
+  .success-card {
+    background: white; border-radius: 24px; padding: 60px 50px;
+    text-align: center; max-width: 580px; width: 100%;
+    box-shadow: 0 20px 60px rgba(26,22,18,0.1);
+    animation: slideUp 0.5s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .success-icon {
+    width: 96px; height: 96px;
+    background: linear-gradient(135deg, #27AE60, #2ecc71);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 30px;
+    font-size: 2.6rem; box-shadow: 0 8px 30px rgba(39,174,96,0.35);
+    animation: popIn 0.5s 0.2s both;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.4); opacity: 0; }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .success-card h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 14px; color: var(--dark); }
+  .success-card > p { color: var(--mid); line-height: 1.75; margin-bottom: 10px; font-size: 0.97rem; }
+
+  .order-num {
+    background: var(--light); border-radius: 14px; padding: 18px 28px;
+    margin: 26px 0; border-left: 4px solid var(--warm);
+  }
+  .order-num .label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 2px; color: var(--mid); font-weight: 600; margin-bottom: 6px; }
+  .order-num .number { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--warm); }
+
+  .delivery-info {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px; margin: 20px 0;
+  }
+
+  .info-box {
+    background: var(--cream); border-radius: 12px; padding: 16px;
+    text-align: left;
+  }
+  .info-box .icon { font-size: 1.4rem; margin-bottom: 8px; display: block; }
+  .info-box .title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid); font-weight: 600; margin-bottom: 4px; }
+  .info-box .value { font-size: 0.9rem; font-weight: 600; color: var(--dark); }
+
+  .action-btns { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+
+  .continue-btn {
+    background: var(--dark); color: var(--cream); border: none;
+    padding: 14px 32px; border-radius: 50px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .continue-btn:hover { background: var(--warm); color: var(--dark); transform: translateY(-1px); }
+
+  .track-btn {
+    background: transparent; color: var(--dark); border: 1.5px solid var(--light);
+    padding: 14px 32px; border-radius: 50px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .track-btn:hover { border-color: var(--warm); color: var(--warm); }
+
+  .confetti-bar {
+    background: linear-gradient(90deg, var(--warm), #E8C99A, var(--warm));
+    height: 4px; border-radius: 0 0 3px 3px;
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+  footer { background: #0F0C0A; color: #666; text-align: center; padding: 24px; font-size: 0.82rem; }
+  footer span { color: var(--warm); }
+
+  @media (max-width: 600px) {
+    .success-card { padding: 40px 24px; }
+    .delivery-info { grid-template-columns: 1fr; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="confetti-bar"></div>
+
+<nav>
+  <a class="logo" href="index.html">LUXE</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Shop</a></li>
+    <li><a href="index.html">Collections</a></li>
+    <li><a href="index.html">About</a></li>
+  </ul>
+  <a class="cart-btn" href="cart.html">🛍 Cart <span>0</span></a>
+</nav>
+
+<div class="steps">
+  <div class="step done"><div class="step-num">✓</div><div class="step-label">Shop</div></div>
+  <div class="step-line done"></div>
+  <div class="step done"><div class="step-num">✓</div><div class="step-label">Cart</div></div>
+  <div class="step-line done"></div>
+  <div class="step done"><div class="step-num">✓</div><div class="step-label">Checkout</div></div>
+  <div class="step-line done"></div>
+  <div class="step active"><div class="step-num">✓</div><div class="step-label">Confirmed</div></div>
+</div>
+
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h2>Order Confirmed!</h2>
+    <p>Thank you for shopping with <strong>LUXE</strong>. Your order has been placed successfully and is now being prepared with care.</p>
+
+    <div class="order-num">
+      <div class="label">Your Order Number</div>
+      <div class="number" id="orderNumber">#LX-00000</div>
+    </div>
+
+    <p style="font-size:0.85rem;color:#aaa;">A confirmation email has been sent to your inbox. Please check your spam folder if you don't see it.</p>
+
+    <div class="delivery-info">
+      <div class="info-box">
+        <span class="icon">📦</span>
+        <div class="title">Estimated Delivery</div>
+        <div class="value">3–5 Business Days</div>
+      </div>
+      <div class="info-box">
+        <span class="icon">🚚</span>
+        <div class="title">Shipping Partner</div>
+        <div class="value">LUXE Express</div>
+      </div>
+      <div class="info-box">
+        <span class="icon">💳</span>
+        <div class="title">Payment Status</div>
+        <div class="value" style="color:var(--green)">✓ Confirmed</div>
+      </div>
+      <div class="info-box">
+        <span class="icon">🔄</span>
+        <div class="title">Returns</div>
+        <div class="value">30-Day Policy</div>
+      </div>
+    </div>
+
+    <div class="action-btns">
+      <a class="continue-btn" href="index.html">Continue Shopping →</a>
+      <a class="track-btn" href="index.html">Track My Order</a>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 <span>LUXE STORE</span>. All rights reserved. Crafted with care.</footer>
+
+<script>
+  const orderNum = localStorage.getItem('luxe_last_order');
+  if (orderNum) {
+    document.getElementById('orderNumber').textContent = '#' + orderNum;
+  } else {
+    document.getElementById('orderNumber').textContent = '#LX-' + Math.floor(10000 + Math.random() * 90000);
+  }
+</script>
+</body>
+</html>
